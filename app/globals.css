@@ -518,6 +518,32 @@ img {
   .menu-btn:hover { background: rgba(255, 253, 248, 0.9); }
 }
 
+.sound-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(180, 137, 60, 0.3);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-45);
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+.sound-btn[aria-pressed="true"] {
+  color: var(--gold-text);
+  border-color: rgba(180, 137, 60, 0.5);
+}
+@media (hover: hover) {
+  .sound-btn:hover {
+    background: rgba(255, 253, 248, 0.9);
+    border-color: var(--gold);
+    color: var(--brown);
+  }
+}
+
 .header-id {
   display: flex;
   align-items: center;
