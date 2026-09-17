@@ -53,14 +53,15 @@ const usEvents: Event[] = [
 
 const ngEvents: Event[] = [
   {
-    name: "Burial & Wake",
+    name: "Burial",
     times: [],
+    note: "TIme will be updated soon. Please check back later.",
     venue: {
       name: "Ken Okonkwo’s Compound",
       lines: ["Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
     },
     region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
-    note: "Date and time to be confirmed.",
+    date: { weekday: "Fri", day: "11", month: "Dec 2026", full: "Friday, 11 December 2026" },
   },
 ];
 
