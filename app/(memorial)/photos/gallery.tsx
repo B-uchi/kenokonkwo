@@ -10,7 +10,7 @@ import {
   type CSSProperties,
   type PointerEvent,
 } from "react";
-import type { Photo } from "@/lib/photos";
+import type { Photo } from "@/lib/types";
 import { preloadImage } from "./preload";
 
 /** one size for wide + fullscreen so both share a single download per photo */
@@ -18,8 +18,12 @@ const VIEW_SIZES = "100vw";
 const TILE_SIZES = "(max-width: 560px) 50vw, 260px";
 const SLIDE_MS = 5000;
 const IDLE_MS = 2600;
+const DEFAULT_ALT = "Photograph of Elder Chuka Ken Okonkwo";
 
-type Item = Photo & { img: ReturnType<typeof getImageProps>["props"] };
+type Item = Photo & {
+  alt: string;
+  img: ReturnType<typeof getImageProps>["props"];
+};
 type View = "grid" | "wide";
 type Pos = { index: number; prev: number };
 
@@ -67,24 +71,24 @@ function usePreloaded(items: Item[], enabled: boolean, from: number) {
   return ready;
 }
 
-export default function PhotoGallery({
-  photos,
-  placeholders,
-}: {
-  photos: Photo[];
-  placeholders: string[];
-}) {
+export default function PhotoGallery({ photos }: { photos: Photo[] }) {
   const items = useMemo<Item[]>(
     () =>
-      photos.map((p) => ({
-        ...p,
-        img: getImageProps({
-          src: p.src,
-          alt: p.alt,
-          sizes: VIEW_SIZES,
-          loading: "eager",
-        }).props,
-      })),
+      photos.map((p) => {
+        const alt = p.caption || DEFAULT_ALT;
+        return {
+          ...p,
+          alt,
+          img: getImageProps({
+            src: p.url,
+            width: p.width,
+            height: p.height,
+            alt,
+            sizes: VIEW_SIZES,
+            loading: "eager",
+          }).props,
+        };
+      }),
     [photos],
   );
   const n = items.length;
@@ -191,21 +195,8 @@ export default function PhotoGallery({
               aria-label={`View ${it.alt}`}
               onClick={() => showWide(i)}
             >
-              <Image
-                src={it.src}
-                alt=""
-                fill
-                sizes={TILE_SIZES}
-                placeholder="blur"
-                style={{ objectPosition: it.position }}
-              />
+              <Image src={it.url} alt="" fill sizes={TILE_SIZES} />
             </button>
-          ))}
-
-          {placeholders.map((label, i) => (
-            <div key={i} className="photo-placeholder">
-              <span>{label}</span>
-            </div>
           ))}
         </div>
       ) : (
@@ -324,10 +315,8 @@ function FlipBook({
                   : undefined
               }
             >
-              <div
-                className="page-backdrop"
-                style={{ backgroundImage: `url(${it.src.blurDataURL})` }}
-              />
+              {/* eslint-disable-next-line @next/next/no-img-element -- same srcset as the photo, so no extra download */}
+              <img {...it.img} alt="" aria-hidden="true" draggable={false} className="page-backdrop" style={undefined} />
               {/* eslint-disable-next-line @next/next/no-img-element -- props come from getImageProps */}
               <img
                 {...it.img}
@@ -500,10 +489,8 @@ function Player({
               className={className}
               aria-hidden={!on}
             >
-              <div
-                className="player-backdrop"
-                style={{ backgroundImage: `url(${it.src.blurDataURL})` }}
-              />
+              {/* eslint-disable-next-line @next/next/no-img-element -- same srcset as the photo, so no extra download */}
+              <img {...it.img} alt="" aria-hidden="true" draggable={false} className="player-backdrop" style={undefined} />
               {/* eslint-disable-next-line @next/next/no-img-element -- props come from getImageProps */}
               <img
                 {...it.img}

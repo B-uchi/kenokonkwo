@@ -5,42 +5,28 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  useTransition,
   type FormEvent,
   type Ref,
 } from "react";
-import type { Tribute } from "@/lib/tributes";
+import type { Tribute } from "@/lib/types";
+import { submitTribute } from "./actions";
 
 const CLOSE_MS = 260;
 
 type ModalHandle = { open: () => void };
 
-export default function TributeWall({
-  initialTributes,
-}: {
-  initialTributes: Tribute[];
-}) {
-  const [tributes, setTributes] = useState(initialTributes);
-  const [newId, setNewId] = useState<string | null>(null);
+export default function TributeWall({ tributes }: { tributes: Tribute[] }) {
   const [thanks, setThanks] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<ModalHandle>(null);
   const openModal = () => modalRef.current?.open();
 
   // hide the thank-you toast after a few seconds
   useEffect(() => {
     if (!thanks) return;
-    const t = setTimeout(() => setThanks(false), 4500);
+    const t = setTimeout(() => setThanks(false), 6000);
     return () => clearTimeout(t);
   }, [thanks]);
-
-  function add(tribute: Tribute) {
-    setTributes((prev) => [tribute, ...prev]);
-    setNewId(tribute.id);
-    setThanks(true);
-    requestAnimationFrame(() =>
-      listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-    );
-  }
 
   const count = tributes.length;
 
@@ -67,12 +53,9 @@ export default function TributeWall({
           </button>
         </div>
       ) : (
-        <div ref={listRef} className="tribute-grid" aria-live="polite">
+        <div className="tribute-grid">
           {tributes.map((t) => (
-            <article
-              key={t.id}
-              className={t.id === newId ? "tribute tribute--new" : "tribute"}
-            >
+            <article key={t.id} className="tribute">
               <div className="tribute-mark" aria-hidden="true">
                 &ldquo;
               </div>
@@ -96,10 +79,11 @@ export default function TributeWall({
         </div>
       )}
 
-      <TributeModal ref={modalRef} onAdd={add} />
+      <TributeModal ref={modalRef} onSubmitted={() => setThanks(true)} />
 
       <p className={thanks ? "toast toast--show" : "toast"} role="status">
-        Thank you &mdash; your tribute has been added.
+        Thank you &mdash; your tribute will appear once the family has reviewed
+        it.
       </p>
     </>
   );
@@ -107,10 +91,10 @@ export default function TributeWall({
 
 function TributeModal({
   ref,
-  onAdd,
+  onSubmitted,
 }: {
   ref: Ref<ModalHandle>;
-  onAdd: (t: Tribute) => void;
+  onSubmitted: () => void;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -118,6 +102,8 @@ function TributeModal({
   const [name, setName] = useState("");
   const [relation, setRelation] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
@@ -142,19 +128,22 @@ function TributeModal({
 
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const m = message.trim();
-    if (!m) return;
+    if (!message.trim() || pending) return;
+    const formData = new FormData(e.currentTarget);
+    setError("");
 
-    onAdd({
-      id: crypto.randomUUID(),
-      name: name.trim() || "Anonymous",
-      relation: relation.trim() || "Friend of the family",
-      message: m,
+    startTransition(async () => {
+      const result = await submitTribute(formData);
+      if (!result?.ok) {
+        setError(result?.message || "Something went wrong. Please try again.");
+        return;
+      }
+      setName("");
+      setRelation("");
+      setMessage("");
+      close();
+      onSubmitted();
     });
-    setName("");
-    setRelation("");
-    setMessage("");
-    close();
   }
 
   return (
@@ -197,6 +186,16 @@ function TributeModal({
           </p>
           <div className="gold-rule leave-divider" />
 
+          {/* honeypot for bots — hidden from people and screen readers */}
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            className="hp-field"
+            aria-hidden="true"
+          />
+
           <div className="field-row">
             <label>
               <span className="sr-only">Your name</span>
@@ -238,9 +237,15 @@ function TributeModal({
             />
           </label>
 
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+
           <div className="leave-actions">
-            <button type="submit" className="btn-gold">
-              Post tribute
+            <button type="submit" className="btn-gold" disabled={pending}>
+              {pending ? "Posting…" : "Post tribute"}
             </button>
             <span>Tributes appear after a short review by the family.</span>
           </div>

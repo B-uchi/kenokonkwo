@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTributeCounts } from "@/lib/server/tributes";
 
 export const metadata: Metadata = {
   title: "Memorial",
@@ -23,7 +24,7 @@ const sections = [
     title: "Tributes",
     description:
       "Leave a message for the family, and read what others have shared.",
-    meta: "0 shared",
+    meta: "Shared",
     icon: (
       <svg {...iconProps}>
         <rect x="3" y="4.5" width="18" height="12.5" rx="4" />
@@ -72,7 +73,9 @@ const sections = [
   },
 ];
 
-export default function HubPage() {
+export default async function HubPage() {
+  const { approved } = await getTributeCounts();
+
   return (
     <div className="hub">
       <div className="hub-head">
@@ -93,7 +96,9 @@ export default function HubPage() {
               <span className="hub-card-title">{s.title}</span>
               <span className="hub-card-desc">{s.description}</span>
             </span>
-            <span className="hub-card-meta">{s.meta}</span>
+            <span className="hub-card-meta">
+              {s.href === "/tributes" ? `${approved} shared` : s.meta}
+            </span>
           </Link>
         ))}
       </nav>

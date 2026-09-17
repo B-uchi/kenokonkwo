@@ -1,21 +1,20 @@
 import type { Metadata } from "next";
-import { photos } from "@/lib/photos";
+import { getPhotos } from "@/lib/server/photos";
 import PhotoGallery from "./gallery";
 
 export const metadata: Metadata = {
   title: "Photographs",
 };
 
-// grid-only stand-ins until real photos arrive
-const placeholders = [
-  "placeholder photo",
-  "placeholder photo",
-  "placeholder photo",
-  "placeholder photo",
-  "placeholder photo",
-];
+export default async function PhotosPage() {
+  const photos = (await getPhotos()).map(({ id, url, width, height, caption }) => ({
+    id,
+    url,
+    width,
+    height,
+    caption,
+  }));
 
-export default function PhotosPage() {
   return (
     <div className="photos">
       <div className="page-head">
@@ -23,7 +22,11 @@ export default function PhotosPage() {
         <h1 className="page-title">Moments we keep</h1>
       </div>
 
-      <PhotoGallery photos={photos} placeholders={placeholders} />
+      {photos.length > 0 ? (
+        <PhotoGallery photos={photos} />
+      ) : (
+        <p className="photos-empty">Photographs will be shared here soon.</p>
+      )}
     </div>
   );
 }

@@ -968,6 +968,30 @@ textarea.field {
   transform: translate(-50%, 0);
 }
 
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.form-error {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(170, 60, 40, 0.08);
+  color: #8a3a26;
+  font-size: 13.5px;
+}
+.photos-empty {
+  margin: 20px 0 0;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink-60);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1106,6 +1130,7 @@ textarea.field {
 }
 .photo img {
   object-fit: cover;
+  object-position: 50% 30%;
   transition: transform 700ms var(--ease-out);
 }
 @media (hover: hover) {
@@ -1295,9 +1320,11 @@ textarea.field {
 }
 .page-backdrop {
   position: absolute;
-  inset: -30px;
-  background-size: cover;
-  background-position: center;
+  top: -30px;
+  left: -30px;
+  width: calc(100% + 60px);
+  height: calc(100% + 60px);
+  object-fit: cover;
   filter: blur(28px) saturate(1.1);
   opacity: 0.9;
 }
@@ -1435,9 +1462,11 @@ html:has(.player) {
 }
 .player-backdrop {
   position: absolute;
-  inset: -80px;
-  background-size: cover;
-  background-position: center;
+  top: -80px;
+  left: -80px;
+  width: calc(100% + 160px);
+  height: calc(100% + 160px);
+  object-fit: cover;
   filter: blur(48px);
   opacity: 0.28;
 }
