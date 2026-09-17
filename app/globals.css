@@ -1933,6 +1933,15 @@ html:has(.player) {
   border-radius: 18px;
   background: rgba(255, 253, 248, 0.7);
 }
+.info--wide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.info--wide .btn-outline {
+  margin-top: 16px;
+}
 .info p {
   margin: 12px 0 0;
   font-size: 15px;
@@ -1943,6 +1952,8 @@ html:has(.player) {
 
 @media (max-width: 560px) {
   .info-grid { gap: 14px; }
+  .info--wide { margin-top: 14px; padding: 22px 20px; }
+  .info--wide .btn-outline { align-self: stretch; }
   .info { padding: 22px 20px; }
 }
 

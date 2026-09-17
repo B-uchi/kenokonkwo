@@ -124,6 +124,22 @@ export default function VenuesPage() {
           </p>
         </section>
       </div>
+
+      <section className="info info--wide">
+        <span className="label">Travelling in</span>
+        <p>
+          Rooms can be booked at the Radisson Hotel, Hauppauge &mdash; the same
+          venue as the Service of Songs.
+        </p>
+        <a
+          href="https://www.booking.com/hotel/us/radisson-hotel-hauppauge-long-island.en-gb.html"
+          target="_blank"
+          rel="noreferrer"
+          className="btn-outline"
+        >
+          Book a room
+        </a>
+      </section>
     </div>
   );
 }
