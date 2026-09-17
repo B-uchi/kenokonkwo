@@ -29,16 +29,22 @@ export default function IntroPage() {
         <p className="hero-eyebrow">In Loving Memory</p>
 
         <h1 className="hero-name">Elder Chuka Ken Okonkwo</h1>
+        <p className="hero-alias">(Captain Ken)</p>
 
         <div className="gold-rule hero-rule" />
 
         <p className="hero-dates">
-          SEPTEMBER 3, 1949 &nbsp;&ndash;&nbsp; SEPTEMBER 10, 2026
+          <span>SEPTEMBER 3, 1949 &nbsp;&ndash;&nbsp; SEPTEMBER 10, 2026</span>{" "}
+          <span className="hero-age">(77 yrs)</span>
         </p>
 
         <p className="hero-quote">
-          A kind soul who touched our hearts, inspired our lives and will
-          forever remain in our memories.
+          <span>
+            An exceptional man who walked with God, led with love and touched
+            countless lives.
+          </span>{" "}
+          <span>He inspired, uplifted and cared unconditionally.</span>{" "}
+          <span>His love lives on through us all.</span>
         </p>
 
         <Link href="/memorial" className="hero-enter">

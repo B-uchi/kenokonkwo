@@ -23,7 +23,7 @@ const parisienne = Parisienne({
 
 const title = "In Loving Memory · Elder Chuka Ken Okonkwo";
 const description =
-  "Celebrating the life of Elder Chuka Ken Okonkwo, September 3, 1949 – September 10, 2026. A kind soul who touched our hearts, inspired our lives and will forever remain in our memories.";
+  "Celebrating the life of Elder Chuka Ken Okonkwo (Captain Ken), September 3, 1949 – September 10, 2026. An exceptional man who walked with God, led with love and touched countless lives.";
 
 export const metadata: Metadata = {
   // Social previews need absolute image URLs — set NEXT_PUBLIC_SITE_URL to the live domain

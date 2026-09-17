@@ -1,6 +1,6 @@
 import type { StaticImageData } from "next/image";
 import portrait from "@/assets/ken-okonkwo.jpeg";
-import flyer from "@/assets/memorial-flyer.jpeg";
+import flyer from "@/assets/memorial-flyer.png";
 
 export type Photo = {
   id: string;

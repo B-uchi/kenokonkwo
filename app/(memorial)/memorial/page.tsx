@@ -61,7 +61,7 @@ const sections = [
   {
     href: "/venues",
     title: "Service & Venues",
-    description: "Dates, times and directions for both services.",
+    description: "Dates, times and directions for every service.",
     meta: "USA & Nigeria",
     icon: (
       <svg {...iconProps}>

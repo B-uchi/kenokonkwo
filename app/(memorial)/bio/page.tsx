@@ -37,8 +37,9 @@ export default function BiographyPage() {
 
       <figure>
         <blockquote>
-          A kind soul who touched our hearts, inspired our lives and will
-          forever remain in our memories.
+          An exceptional man who walked with God, led with love and touched
+          countless lives. He inspired, uplifted and cared unconditionally. His
+          love lives on through us all.
         </blockquote>
         <figcaption>The Okonkwo family</figcaption>
       </figure>
