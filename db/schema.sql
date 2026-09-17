@@ -26,3 +26,12 @@ create table if not exists photos (
 
 create index if not exists photos_position_idx
   on photos (position, created_at);
+
+create table if not exists biography (
+  id         smallint primary key default 1 check (id = 1),
+  title      text not null default '',
+  body       jsonb not null default '{"type":"doc","content":[]}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+insert into biography (id) values (1) on conflict (id) do nothing;

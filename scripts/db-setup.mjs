@@ -20,6 +20,32 @@ const statements = schema
 for (const statement of statements) await sql.query(statement);
 console.log(`✓ schema applied (${statements.length} statements)`);
 
+// first run only: keep the biography the site shipped with
+const [bio] = await sql`select title from biography where id = 1`;
+if (!bio?.title) {
+  const para = (text) => ({ type: "paragraph", content: [{ type: "text", text }] });
+  const heading = (text) => ({ type: "heading", attrs: { level: 2 }, content: [{ type: "text", text }] });
+  const body = {
+    type: "doc",
+    content: [
+      para("He was born in September 1949, the son of a farming family, and grew into a man known first for his patience and then for his generosity."),
+      para("Two or three paragraphs here on his early years: the village he was born in, the schools he attended, the teachers and relatives who shaped him, and the decision that took him away from home for the first time."),
+      heading("Family"),
+      para("His marriage, his children and grandchildren, the household he built, and the traditions he kept."),
+      heading("Faith and community"),
+      para("His years of service as an Elder, the congregations he served, and the people he quietly carried."),
+      {
+        type: "blockquote",
+        content: [para("An exceptional man who walked with God, led with love and touched countless lives. He inspired, uplifted and cared unconditionally. His love lives on through us all.")],
+      },
+      heading("Later years"),
+      para("His retirement, the visits between Nigeria and the United States, and the way he spent his last years."),
+    ],
+  };
+  await sql`update biography set title = ${"A life of service"}, body = ${JSON.stringify(body)}::jsonb, updated_at = now() where id = 1`;
+  console.log("✓ seeded biography");
+}
+
 const [{ count }] = await sql`select count(*)::int as count from photos`;
 if (count > 0) {
   console.log(`✓ photos table already has ${count} rows — skipping seed`);

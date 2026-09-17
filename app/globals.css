@@ -1047,44 +1047,82 @@ textarea.field {
   color: var(--ink);
   text-wrap: pretty;
 }
-.bio-body {
-  margin: 14px 0 0;
+/* rendered biography text — shared by the public page and the admin editor */
+.bio-content {
   font-size: 16px;
   line-height: 1.85;
   color: var(--ink-86);
+}
+.bio-content > :first-child {
+  margin-top: 34px;
+}
+.bio-content > p:first-of-type {
+  font-family: var(--serif);
+  font-size: clamp(20px, 3vw, 22px);
+  line-height: 1.7;
+  color: var(--ink);
+}
+.bio-content p,
+.bio-content ul,
+.bio-content ol {
+  margin: 20px 0 0;
   text-wrap: pretty;
 }
-.bio-lead + .bio-body {
-  margin-top: 24px;
-}
-.bio h2 {
+.bio-content h2 {
   margin: 40px 0 0;
   font-family: var(--serif);
   font-weight: 500;
   font-size: 24px;
+  line-height: 1.25;
   color: var(--brown);
 }
-.bio figure {
+.bio-content h3 {
+  margin: 30px 0 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--brown);
+}
+.bio-content h2 + p,
+.bio-content h3 + p {
+  margin-top: 14px;
+}
+.bio-content ul,
+.bio-content ol {
+  padding-left: 22px;
+}
+.bio-content li + li {
+  margin-top: 6px;
+}
+.bio-content blockquote {
   margin: 44px 0 0;
   padding: 28px 30px;
   border-left: 2px solid rgba(180, 137, 60, 0.6);
   background: rgba(255, 253, 248, 0.7);
-}
-.bio blockquote {
-  margin: 0;
   font-family: var(--serif);
   font-style: italic;
   font-size: clamp(20px, 3vw, 23px);
   line-height: 1.6;
   color: var(--ink);
 }
-.bio figcaption {
-  margin-top: 14px;
-  font-size: 11.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-50);
+.bio-content blockquote p {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 }
+.bio-content blockquote p + p {
+  margin-top: 12px;
+}
+.bio-content hr {
+  height: 1px;
+  margin: 36px 0 0;
+  border: 0;
+  background: linear-gradient(90deg, rgba(180, 137, 60, 0), rgba(180, 137, 60, 0.7), rgba(180, 137, 60, 0));
+}
+
 .bio-links {
   display: flex;
   gap: 14px;
@@ -1093,7 +1131,7 @@ textarea.field {
 }
 
 @media (max-width: 560px) {
-  .bio figure { padding: 22px 20px; }
+  .bio-content blockquote { padding: 22px 20px; }
   .bio-links .btn-outline { flex: 1 1 100%; }
 }
 

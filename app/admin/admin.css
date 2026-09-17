@@ -361,3 +361,86 @@
     font-size: 16px;
   }
 }
+
+/* biography editor */
+.admin-editor {
+  display: grid;
+  gap: 20px;
+  margin-top: 22px;
+}
+.admin-field {
+  display: block;
+}
+.admin-field > span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+}
+.admin-title-input {
+  font-family: var(--serif);
+  font-size: 26px;
+  padding: 10px 14px;
+}
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid rgba(180, 137, 60, 0.3);
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  background: rgba(255, 253, 248, 0.9);
+}
+.admin-tool {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-60);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+.admin-tool:hover:not(:disabled) {
+  background: rgba(180, 137, 60, 0.12);
+  color: var(--brown);
+}
+.admin-tool[aria-pressed="true"] {
+  background: var(--cream);
+  border-color: rgba(180, 137, 60, 0.45);
+  color: var(--brown);
+}
+.admin-tool:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.admin-toolbar-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: rgba(180, 137, 60, 0.3);
+}
+.admin-editor-surface {
+  padding: 8px clamp(16px, 3vw, 28px) 28px;
+  border: 1px solid rgba(180, 137, 60, 0.3);
+  border-radius: 0 0 12px 12px;
+  background: var(--cream);
+}
+.admin-editor-surface .bio-content {
+  min-height: 420px;
+  outline: none;
+}
+.admin-editor-surface .ProseMirror:focus {
+  outline: none;
+}
+.admin-saved {
+  font-size: 13px;
+  color: #4f7a3a;
+}
