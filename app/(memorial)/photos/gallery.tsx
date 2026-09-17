@@ -12,6 +12,7 @@ import {
 } from "react";
 import type { Photo } from "@/lib/types";
 import { preloadImage } from "./preload";
+import { requestAmbientPlay } from "@/lib/ambient";
 
 /** one size for wide + fullscreen so both share a single download per photo */
 const VIEW_SIZES = "100vw";
@@ -115,8 +116,9 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
   );
 
   function openPlayer() {
-    // must be requested inside the click for browsers to allow it
+    // both must be requested inside the click for browsers to allow them
     document.documentElement.requestFullscreen?.().catch(() => {});
+    requestAmbientPlay();
     setPlayerOpen(true);
   }
 

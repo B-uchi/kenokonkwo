@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AMBIENT_PLAY_EVENT } from "@/lib/ambient";
 
 const TRACKS = ["bg-a", "bg-b", "bg-c", "bg-d"];
 const GAP_MS = 2000; // quiet pause between tracks (each already fades out)
-const VOLUME = 0.45;
+const VOLUME = 0.35;
 const FADE_MS = 1200;
 const STORAGE_KEY = "memorial-sound";
 
@@ -87,6 +88,17 @@ export default function AmbientAudio() {
       clearTimeout(gapTimer.current);
       clearInterval(fadeTimer.current);
     };
+  }, [start]);
+
+  // the slideshow (and anything else) can ask for music, unless it was turned off
+  useEffect(() => {
+    const onRequest = () => {
+      const audio = audioRef.current;
+      if (!audio || !audio.paused || mutedByChoice()) return;
+      void start();
+    };
+    window.addEventListener(AMBIENT_PLAY_EVENT, onRequest);
+    return () => window.removeEventListener(AMBIENT_PLAY_EVENT, onRequest);
   }, [start]);
 
   function playNext() {
