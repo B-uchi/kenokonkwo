@@ -40,8 +40,7 @@ export default function IntroPage() {
 
         <p className="hero-quote">
           <span>
-            An exceptional man who walked with God, led with love and touched
-            countless lives.
+            An exceptional man who walked with God, led with love and touched countless lives.
           </span>{" "}
           <span>He inspired, uplifted and cared unconditionally.</span>{" "}
           <span>His love lives on through us all.</span>
