@@ -55,7 +55,7 @@ const ngEvents: Event[] = [
   {
     name: "Burial",
     times: [],
-    note: "TIme will be updated soon. Please check back later.",
+    note: "Time will be updated soon. Please check back later.",
     venue: {
       name: "Ken Okonkwo’s Compound",
       lines: ["Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
@@ -103,9 +103,11 @@ export default function VenuesPage() {
           <p>
             Kindly RSVP by 30 September 2026
             <br />
-            <a href="tel:+14389780714">438-978-0714</a>
+            <a href="tel:+14389780714">438-978-0714</a>{" "}
+            <span className="rsvp-name">(Dili)</span>
             <br />
-            <a href="tel:+16313556425">631-355-6425</a>
+            <a href="tel:+16313556425">631-355-6425</a>{" "}
+            <span className="rsvp-name">(Dr Ralu)</span>
           </p>
         </section>
         <section className="info">

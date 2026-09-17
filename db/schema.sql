@@ -5,7 +5,7 @@ create table if not exists tributes (
   name        text not null,
   relation    text not null,
   message     text not null,
-  status      text not null default 'pending'
+  status      text not null default 'approved'
               check (status in ('pending', 'approved', 'hidden')),
   created_at  timestamptz not null default now(),
   reviewed_at timestamptz

@@ -1817,6 +1817,11 @@ html:has(.player) {
   color: var(--ink-60);
 }
 
+.rsvp-name {
+  color: var(--ink-45);
+  font-size: 13.5px;
+}
+
 @media (max-width: 860px) {
   .event {
     grid-template-columns: 84px minmax(0, 1fr);
