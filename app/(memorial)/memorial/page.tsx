@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import HubCard from "./hub-card";
 import { getTributeCounts } from "@/lib/server/tributes";
 
 export const metadata: Metadata = {
@@ -85,10 +85,9 @@ export default async function HubPage() {
 
       <nav className="hub-grid" aria-label="Memorial sections">
         {sections.map((s, i) => (
-          <Link
+          <HubCard
             key={s.href}
             href={s.href}
-            className="hub-card"
             style={{ animationDelay: `${60 + i * 80}ms` }}
           >
             <span className="hub-icon">{s.icon}</span>
@@ -99,7 +98,7 @@ export default async function HubPage() {
             <span className="hub-card-meta">
               {s.href === "/tributes" ? `${approved} shared` : s.meta}
             </span>
-          </Link>
+          </HubCard>
         ))}
       </nav>
 
