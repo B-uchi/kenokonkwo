@@ -10,9 +10,14 @@ const FADE_MS = 1200;
 const STORAGE_KEY = "memorial-sound";
 const POSITION_KEY = "memorial-sound-position";
 
-/** Opus is far smaller; MP3 is the fallback for browsers without it. */
-const trackUrl = (audio: HTMLAudioElement, index: number) => {
-  const opus = audio.canPlayType('audio/webm; codecs="opus"') !== "";
+/**
+ * Opus is far smaller, but only where it definitely plays: Safari answers
+ * "maybe" for formats it cannot actually decode, so anything short of
+ * "probably" gets the MP3.
+ */
+const trackUrl = (audio: HTMLAudioElement, index: number, forceMp3 = false) => {
+  const opus =
+    !forceMp3 && audio.canPlayType('audio/webm; codecs="opus"') === "probably";
   return `/audio/${TRACKS[index]}.${opus ? "webm" : "mp3"}`;
 };
 
@@ -61,6 +66,7 @@ export default function AmbientAudio() {
   const gapTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const fadeTimer = useRef<ReturnType<typeof setInterval>>(undefined);
   const resumeAt = useRef(0);
+  const forceMp3 = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [waitingForClick, setWaitingForClick] = useState(false);
 
@@ -68,6 +74,8 @@ export default function AmbientAudio() {
   const fadeIn = useCallback((audio: HTMLAudioElement) => {
     clearInterval(fadeTimer.current);
     audio.volume = 0;
+    // iOS ignores volume changes (the hardware buttons own it) — play as-is
+    if (audio.volume !== 0) return;
     const step = 50;
     let elapsed = 0;
     fadeTimer.current = setInterval(() => {
@@ -80,7 +88,7 @@ export default function AmbientAudio() {
   const start = useCallback(async () => {
     const audio = audioRef.current;
     if (!audio) return false;
-    if (!audio.src) audio.src = trackUrl(audio, track.current);
+    if (!audio.src) audio.src = trackUrl(audio, track.current, forceMp3.current);
 
     // pick the track back up where the last page left it
     const seekTo = resumeAt.current;
@@ -150,7 +158,7 @@ export default function AmbientAudio() {
     const audio = audioRef.current;
     if (!audio) return;
     track.current = (track.current + 1) % TRACKS.length;
-    audio.src = trackUrl(audio, track.current);
+    audio.src = trackUrl(audio, track.current, forceMp3.current);
     savePosition(track.current, 0);
     void start();
   }
@@ -175,6 +183,15 @@ export default function AmbientAudio() {
       <audio
         ref={audioRef}
         preload="auto"
+        onError={() => {
+          // a format the browser claimed it could play but can't: retry as MP3
+          const audio = audioRef.current;
+          if (!audio || forceMp3.current || !audio.src.endsWith(".webm")) return;
+          forceMp3.current = true;
+          resumeAt.current = audio.currentTime || resumeAt.current;
+          audio.src = trackUrl(audio, track.current, true);
+          void start();
+        }}
         onTimeUpdate={(e) => {
           const audio = e.currentTarget;
           // roughly every 2s of playback
