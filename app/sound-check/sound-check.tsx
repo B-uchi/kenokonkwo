@@ -14,15 +14,9 @@ function collectFacts(): [string, string][] {
   a.volume = 0.3;
   return [
     ["Browser", navigator.userAgent],
-    ["WebM / Opus", a.canPlayType('audio/webm; codecs="opus"') || "no"],
-    ["MP3", a.canPlayType("audio/mpeg") || "no"],
+    ["AAC (m4a)", a.canPlayType('audio/mp4; codecs="mp4a.40.2"') || "no"],
     ["Volume can be set", a.volume === 0.3 ? "yes" : "no (iPhone behaviour)"],
-    [
-      "Site would use",
-      a.canPlayType('audio/webm; codecs="opus"') === "probably"
-        ? "bg-a.webm"
-        : "bg-a.mp3",
-    ],
+    ["Site uses", "bg-a.m4a"],
   ];
 }
 
@@ -70,11 +64,8 @@ export default function SoundCheck() {
       </p>
 
       <div className="bio-links" style={{ marginTop: 24 }}>
-        <button type="button" className="btn-gold" onClick={() => test("bg-a.mp3")}>
-          Test MP3
-        </button>
-        <button type="button" className="btn-outline" onClick={() => test("bg-a.webm")}>
-          Test WebM
+        <button type="button" className="btn-gold" onClick={() => test("bg-a.m4a")}>
+          Test the music
         </button>
         <button
           type="button"

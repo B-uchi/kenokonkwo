@@ -11,15 +11,6 @@ const nextConfig: NextConfig = {
       ? [{ protocol: "https", hostname: photoHost.hostname, pathname: "/photos/**" }]
       : [],
   },
-  async headers() {
-    return [
-      {
-        // audio-only WebM is served as video/webm by default; some browsers reject that
-        source: "/audio/:file*.webm",
-        headers: [{ key: "Content-Type", value: "audio/webm" }],
-      },
-    ];
-  },
 };
 
 export default nextConfig;
