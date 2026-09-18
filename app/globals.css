@@ -745,11 +745,25 @@ img {
   font-size: 10.5px;
 }
 
-.tribute-grid {
+.tribute-list {
   scroll-margin-top: 96px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: 18px;
+  gap: 14px;
+  /* each card keeps its own height, so expanding one leaves its row-mate alone */
+  align-items: start;
+  max-width: 720px;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .tribute-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    max-width: none;
+  }
+  /* every card starts the same height: six lines of text, short ones included */
+  .tribute-message {
+    min-height: calc(6 * 1.68em);
+  }
 }
 
 .tribute {
@@ -772,6 +786,33 @@ img {
   line-height: 0.6;
   color: rgba(180, 137, 60, 0.45);
 }
+/* clamped to keep every card the same rough height */
+.tribute-message.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tribute-more {
+  align-self: flex-start;
+  margin-top: -4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--gold-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+.tribute-more:hover {
+  color: #7e5a1f;
+}
+.tribute-more.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .tribute-message {
   margin: 0;
   font-family: var(--serif);
@@ -1040,7 +1081,7 @@ textarea.field {
 }
 
 @media (max-width: 560px) {
-  .tribute-grid { gap: 14px; }
+  .tribute-list { gap: 12px; }
   .tribute { padding: 22px 20px; }
   .tribute-message { font-size: 18px; }
   /* 16px stops iOS Safari zooming into inputs */

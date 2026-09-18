@@ -53,18 +53,9 @@ export default function TributeWall({ tributes }: { tributes: Tribute[] }) {
           </button>
         </div>
       ) : (
-        <div className="tribute-grid">
+        <div className="tribute-list">
           {tributes.map((t) => (
-            <article key={t.id} className="tribute">
-              <div className="tribute-mark" aria-hidden="true">
-                &ldquo;
-              </div>
-              <p className="tribute-message">{t.message}</p>
-              <div className="tribute-by">
-                <span className="tribute-name">{t.name}</span>
-                <span className="tribute-relation">{t.relation}</span>
-              </div>
-            </article>
+            <TributeCard key={t.id} tribute={t} />
           ))}
         </div>
       )}
@@ -86,6 +77,57 @@ export default function TributeWall({ tributes }: { tributes: Tribute[] }) {
         it.
       </p>
     </>
+  );
+}
+
+function TributeCard({ tribute }: { tribute: Tribute }) {
+  const messageRef = useRef<HTMLParagraphElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [clipped, setClipped] = useState(false);
+
+  // only offer "Read more" when the text is actually cut off
+  useEffect(() => {
+    if (expanded) return;
+    const measure = () => {
+      const el = messageRef.current;
+      if (el) setClipped(el.scrollHeight > el.clientHeight + 2);
+    };
+    const id = requestAnimationFrame(measure);
+    window.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("resize", measure);
+    };
+  }, [expanded]);
+
+  return (
+    <article className="tribute">
+      <div className="tribute-mark" aria-hidden="true">
+        &ldquo;
+      </div>
+      <p
+        ref={messageRef}
+        className={expanded ? "tribute-message" : "tribute-message is-clamped"}
+      >
+        {tribute.message}
+      </p>
+      {/* always rendered — hidden rather than removed, so every card is the same height */}
+      <button
+        type="button"
+        className={
+          clipped || expanded ? "tribute-more" : "tribute-more is-hidden"
+        }
+        onClick={() => setExpanded((v) => !v)}
+        aria-hidden={!clipped && !expanded}
+        tabIndex={clipped || expanded ? undefined : -1}
+      >
+        {expanded ? "Read less" : "Read more"}
+      </button>
+      <div className="tribute-by">
+        <span className="tribute-name">{tribute.name}</span>
+        <span className="tribute-relation">{tribute.relation}</span>
+      </div>
+    </article>
   );
 }
 
