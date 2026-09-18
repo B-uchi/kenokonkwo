@@ -27,6 +27,9 @@ export async function submitTribute(formData: FormData): Promise<ActionState> {
     return { ok: false, message: "Something went wrong. Please try again." };
   }
 
+  // tributes are public straight away, so refresh the pages that show them
+  revalidatePath("/tributes");
+  revalidatePath("/memorial");
   revalidatePath("/admin/tributes");
   return { ok: true, message: "" };
 }

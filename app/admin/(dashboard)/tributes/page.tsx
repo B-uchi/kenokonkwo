@@ -10,10 +10,11 @@ export const metadata: Metadata = {
   title: "Tributes",
 };
 
+// tributes publish immediately, so the live list is the useful default
 const tabs: { status: TributeStatus; label: string; empty: string }[] = [
-  { status: "pending", label: "Pending", empty: "No tributes waiting for review." },
-  { status: "approved", label: "Approved", empty: "No approved tributes yet." },
+  { status: "approved", label: "On the site", empty: "No tributes yet." },
   { status: "hidden", label: "Hidden", empty: "Nothing hidden." },
+  { status: "pending", label: "Pending", empty: "Nothing waiting for review." },
 ];
 
 const formatDate = new Intl.DateTimeFormat("en-US", {
@@ -38,7 +39,10 @@ export default async function AdminTributesPage({
     <>
       <div className="admin-title">
         <h1>Tributes</h1>
-        <p>Approve tributes to show them on the site, or hide them from view.</p>
+        <p>
+          Tributes appear on the site as soon as they are posted. Hide anything
+          that shouldn&rsquo;t be there.
+        </p>
       </div>
 
       <nav className="admin-tabs" aria-label="Tribute status">

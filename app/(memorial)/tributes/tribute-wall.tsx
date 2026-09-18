@@ -73,8 +73,7 @@ export default function TributeWall({ tributes }: { tributes: Tribute[] }) {
       <TributeModal ref={modalRef} onSubmitted={() => setThanks(true)} />
 
       <p className={thanks ? "toast toast--show" : "toast"} role="status">
-        Thank you &mdash; your tribute will appear once the family has reviewed
-        it.
+        Thank you &mdash; your tribute is now on the page.
       </p>
     </>
   );
@@ -289,7 +288,7 @@ function TributeModal({
             <button type="submit" className="btn-gold" disabled={pending}>
               {pending ? "Posting…" : "Post tribute"}
             </button>
-            <span>Tributes appear after a short review by the family.</span>
+            <span>Your words appear on the page straight away.</span>
           </div>
         </form>
       </div>
