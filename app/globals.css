@@ -532,6 +532,15 @@ img {
   cursor: pointer;
   transition: background 200ms ease, border-color 200ms ease, color 200ms ease;
 }
+@keyframes soundWaiting {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(180, 137, 60, 0.45); }
+  50% { box-shadow: 0 0 0 7px rgba(180, 137, 60, 0); }
+}
+.sound-btn--waiting {
+  color: var(--gold-text);
+  border-color: rgba(180, 137, 60, 0.55);
+  animation: soundWaiting 2.6s ease-out infinite;
+}
 .sound-btn[aria-pressed="true"] {
   color: var(--gold-text);
   border-color: rgba(180, 137, 60, 0.5);

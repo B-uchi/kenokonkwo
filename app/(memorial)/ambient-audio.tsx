@@ -8,6 +8,7 @@ const GAP_MS = 2000; // quiet pause between tracks (each already fades out)
 const VOLUME = 0.35;
 const FADE_MS = 1200;
 const STORAGE_KEY = "memorial-sound";
+const POSITION_KEY = "memorial-sound-position";
 
 /** Opus is far smaller; MP3 is the fallback for browsers without it. */
 const trackUrl = (audio: HTMLAudioElement, index: number) => {
@@ -23,6 +24,29 @@ const remember = (value: "on" | "off") => {
   }
 };
 
+/** Remember where we are so a page refresh picks the music back up. */
+const savePosition = (index: number, seconds: number) => {
+  try {
+    sessionStorage.setItem(POSITION_KEY, JSON.stringify({ index, seconds }));
+  } catch {
+    // ignore — resuming is a nicety
+  }
+};
+
+const loadPosition = () => {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(POSITION_KEY) ?? "");
+    const index = Number(saved?.index);
+    const seconds = Number(saved?.seconds);
+    if (Number.isInteger(index) && index >= 0 && index < TRACKS.length && seconds >= 0) {
+      return { index, seconds };
+    }
+  } catch {
+    // no usable position
+  }
+  return null;
+};
+
 const mutedByChoice = () => {
   try {
     return localStorage.getItem(STORAGE_KEY) === "off";
@@ -36,7 +60,9 @@ export default function AmbientAudio() {
   const track = useRef(0);
   const gapTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const fadeTimer = useRef<ReturnType<typeof setInterval>>(undefined);
+  const resumeAt = useRef(0);
   const [playing, setPlaying] = useState(false);
+  const [waitingForClick, setWaitingForClick] = useState(false);
 
   /** ease the volume up so the first note isn't abrupt */
   const fadeIn = useCallback((audio: HTMLAudioElement) => {
@@ -55,19 +81,38 @@ export default function AmbientAudio() {
     const audio = audioRef.current;
     if (!audio) return false;
     if (!audio.src) audio.src = trackUrl(audio, track.current);
+
+    // pick the track back up where the last page left it
+    const seekTo = resumeAt.current;
+    resumeAt.current = 0;
+    if (seekTo > 0) {
+      const seek = () => {
+        if (seekTo < audio.duration - 2) audio.currentTime = seekTo;
+      };
+      if (audio.readyState >= 1) seek();
+      else audio.addEventListener("loadedmetadata", seek, { once: true });
+    }
+
     try {
       fadeIn(audio);
       await audio.play();
       setPlaying(true);
+      setWaitingForClick(false);
       return true;
     } catch {
-      return false; // browser blocked it — needs a click first
+      setWaitingForClick(true); // browser blocked it — needs a click first
+      return false;
     }
   }, [fadeIn]);
 
   // try to start on arrival; if the browser blocks it, wait for a first click
   useEffect(() => {
     let cancelled = false;
+    const saved = loadPosition();
+    if (saved) {
+      track.current = saved.index;
+      resumeAt.current = saved.seconds;
+    }
     const onGesture = () => {
       if (!cancelled && !mutedByChoice()) void start();
     };
@@ -106,6 +151,7 @@ export default function AmbientAudio() {
     if (!audio) return;
     track.current = (track.current + 1) % TRACKS.length;
     audio.src = trackUrl(audio, track.current);
+    savePosition(track.current, 0);
     void start();
   }
 
@@ -117,6 +163,7 @@ export default function AmbientAudio() {
       clearInterval(fadeTimer.current);
       audio.pause();
       setPlaying(false);
+      setWaitingForClick(false);
       remember("off");
     } else {
       void start().then((ok) => ok && remember("on"));
@@ -128,6 +175,13 @@ export default function AmbientAudio() {
       <audio
         ref={audioRef}
         preload="auto"
+        onTimeUpdate={(e) => {
+          const audio = e.currentTarget;
+          // roughly every 2s of playback
+          if (Math.floor(audio.currentTime) % 2 === 0) {
+            savePosition(track.current, audio.currentTime);
+          }
+        }}
         onEnded={() => {
           // short silence, then the next track
           clearTimeout(gapTimer.current);
@@ -136,11 +190,17 @@ export default function AmbientAudio() {
       />
       <button
         type="button"
-        className="sound-btn"
+        className={waitingForClick ? "sound-btn sound-btn--waiting" : "sound-btn"}
         onClick={toggle}
         aria-pressed={playing}
         aria-label={playing ? "Turn music off" : "Turn music on"}
-        title={playing ? "Turn music off" : "Turn music on"}
+        title={
+          waitingForClick
+            ? "Music is ready — click to play"
+            : playing
+              ? "Turn music off"
+              : "Turn music on"
+        }
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" />
