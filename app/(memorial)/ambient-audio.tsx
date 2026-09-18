@@ -90,12 +90,12 @@ export default function AmbientAudio() {
     };
   }, [start]);
 
-  // the slideshow (and anything else) can ask for music, unless it was turned off
+  // the menu cards and slideshow ask for music on click; they start it either way
   useEffect(() => {
     const onRequest = () => {
       const audio = audioRef.current;
-      if (!audio || !audio.paused || mutedByChoice()) return;
-      void start();
+      if (!audio || !audio.paused) return;
+      void start().then((ok) => ok && remember("on"));
     };
     window.addEventListener(AMBIENT_PLAY_EVENT, onRequest);
     return () => window.removeEventListener(AMBIENT_PLAY_EVENT, onRequest);
