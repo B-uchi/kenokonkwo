@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AMBIENT_PLAY_EVENT } from "@/lib/ambient";
 
 const TRACKS = ["bg-a", "bg-b", "bg-c", "bg-d"];
-const GAP_MS = 2000; // quiet pause between tracks (each already fades out)
+const GAP_MS = 1500; // quiet pause between tracks (each already fades out)
 const VOLUME = 0.35;
 const FADE_MS = 1200;
 const STORAGE_KEY = "memorial-sound";
