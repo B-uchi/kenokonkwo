@@ -8,31 +8,84 @@ type Job = {
   id: string;
   name: string;
   progress: number;
-  status: "queued" | "uploading" | "saving" | "done" | "error";
+  status: "queued" | "preparing" | "uploading" | "saving" | "done" | "error";
   error?: string;
+  note?: string;
 };
 
 const CONCURRENCY = 2;
+/** camera photos are far larger than the site ever shows */
+const MAX_EDGE = 2000;
+const KEEP_ORIGINAL_UNDER = 1_200_000;
+
+const readableSize = (bytes: number) =>
+  bytes >= 1024 * 1024
+    ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
+    : `${Math.round(bytes / 1024)} KB`;
+
+const toBlob = (canvas: HTMLCanvasElement, type: string) =>
+  new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, type, 0.85));
+
+type Prepared = { body: Blob; type: string; width: number; height: number };
+
+/**
+ * Shrink to a sensible size in the browser before uploading: smaller storage,
+ * less transfer, and re-encoding drops camera metadata such as GPS location.
+ */
+async function prepare(file: File): Promise<Prepared> {
+  const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const { width: fullWidth, height: fullHeight } = bitmap;
+  const scale = Math.min(1, MAX_EDGE / Math.max(fullWidth, fullHeight));
+  const original: Prepared = {
+    body: file,
+    type: file.type,
+    width: fullWidth,
+    height: fullHeight,
+  };
+
+  if (scale === 1 && file.size <= KEEP_ORIGINAL_UNDER) {
+    bitmap.close();
+    return original;
+  }
+
+  const width = Math.round(fullWidth * scale);
+  const height = Math.round(fullHeight * scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    bitmap.close();
+    return original;
+  }
+  context.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+
+  let encoded = await toBlob(canvas, "image/webp");
+  if (encoded?.type !== "image/webp") encoded = await toBlob(canvas, "image/jpeg");
+  // if shrinking somehow made it bigger, keep what the family picked
+  if (!encoded || encoded.size >= file.size) return original;
+
+  return { body: encoded, type: encoded.type, width, height };
+}
 
 /** PUT straight to R2 with progress (fetch has no upload progress). */
-function putFile(url: string, file: File, onProgress: (p: number) => void) {
+function putFile(
+  url: string,
+  body: Blob,
+  type: string,
+  onProgress: (p: number) => void,
+) {
   return new Promise<void>((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", url);
-    xhr.setRequestHeader("content-type", file.type);
+    xhr.setRequestHeader("content-type", type);
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded / e.total);
     xhr.onload = () =>
       xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`));
     xhr.onerror = () => reject(new Error("Network error during upload"));
-    xhr.send(file);
+    xhr.send(body);
   });
-}
-
-async function readDimensions(file: File) {
-  const bitmap = await createImageBitmap(file);
-  const size = { width: bitmap.width, height: bitmap.height };
-  bitmap.close();
-  return size;
 }
 
 export default function PhotoUploader() {
@@ -46,15 +99,20 @@ export default function PhotoUploader() {
   async function upload(file: File, id: string) {
     try {
       if (!PHOTO_TYPES[file.type]) throw new Error("Use a JPEG, PNG, WebP or AVIF image.");
-      if (file.size > MAX_PHOTO_BYTES) throw new Error(`Larger than ${MAX_PHOTO_MB} MB.`);
 
-      const { width, height } = await readDimensions(file);
-      update(id, { status: "uploading" });
+      update(id, { status: "preparing" });
+      const { body, type, width, height } = await prepare(file);
+      if (body.size > MAX_PHOTO_BYTES) throw new Error(`Larger than ${MAX_PHOTO_MB} MB.`);
+      const note =
+        body.size < file.size
+          ? `${readableSize(file.size)} → ${readableSize(body.size)}`
+          : readableSize(body.size);
+      update(id, { status: "uploading", note });
 
-      const ticket = await createPhotoUpload({ contentType: file.type, size: file.size });
+      const ticket = await createPhotoUpload({ contentType: type, size: body.size });
       if (!ticket.ok) throw new Error(ticket.message);
 
-      await putFile(ticket.url, file, (progress) => update(id, { progress }));
+      await putFile(ticket.url, body, type, (progress) => update(id, { progress }));
       update(id, { status: "saving", progress: 1 });
 
       const saved = await savePhoto({ key: ticket.key, width, height });
@@ -142,6 +200,7 @@ export default function PhotoUploader() {
               <span className="admin-job-name">{j.name}</span>
               <span className="admin-job-status">
                 {j.status === "queued" && "Waiting…"}
+                {j.status === "preparing" && "Preparing…"}
                 {j.status === "uploading" && `${Math.round(j.progress * 100)}%`}
                 {j.status === "saving" && "Saving…"}
                 {j.status === "done" && "Added"}

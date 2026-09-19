@@ -107,7 +107,7 @@ export default function RsvpModal({
             <form className="leave-form" onSubmit={submit}>
               <p className="eyebrow">RSVP</p>
               <h2 id="rsvp-heading">Let the family know</h2>
-              <p className="leave-intro">
+              <p className="leave-intro" style={{marginLeft: "auto", marginRight: "auto"}}>
                 So they can plan for you at the service.
               </p>
               <div className="gold-rule leave-divider" />
