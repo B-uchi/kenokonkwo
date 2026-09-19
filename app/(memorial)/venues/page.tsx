@@ -32,7 +32,7 @@ const usEvents: Event[] = [
     mapsQuery: "Radisson Hotel Hauppauge-Long Island",
   },
   {
-    name: "Funeral Viewing & Service",
+    name: "Funeral Viewing & Service (Dress code: All White)",
     date: { weekday: "Sat", day: "10", month: "Oct 2026", full: "Saturday, 10 October 2026" },
     times: ["Viewing 8:00 AM", "Service 10:00 AM"],
     venue: {
