@@ -7,6 +7,7 @@ const links = [
   { href: "/admin/tributes", label: "Tributes" },
   { href: "/admin/photos", label: "Photos" },
   { href: "/admin/biography", label: "Biography" },
+  { href: "/admin/rsvps", label: "RSVPs" },
 ];
 
 export default function NavLinks() {

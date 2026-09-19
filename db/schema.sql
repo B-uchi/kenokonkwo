@@ -35,3 +35,14 @@ create table if not exists biography (
 );
 
 insert into biography (id) values (1) on conflict (id) do nothing;
+
+create table if not exists rsvps (
+  id         uuid primary key default gen_random_uuid(),
+  name       text not null,
+  phone      text not null,
+  email      text not null default '',
+  guests     integer not null default 1 check (guests between 1 and 50),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists rsvps_created_idx on rsvps (created_at desc);

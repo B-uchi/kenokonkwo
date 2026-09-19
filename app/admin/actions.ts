@@ -21,6 +21,7 @@ import {
   deleteTribute,
   setTributeStatus,
 } from "@/lib/server/tributes";
+import { deleteRsvp, getAllRsvps } from "@/lib/server/rsvps";
 import { MAX_PHOTO_BYTES, MAX_PHOTO_MB, PHOTO_TYPES } from "@/lib/photo-rules";
 import type { ActionState, TributeStatus } from "@/lib/types";
 
@@ -168,4 +169,26 @@ export async function deletePhoto(formData: FormData) {
   } catch (error) {
     console.error("R2 delete failed; object left orphaned", key, error);
   }
+}
+
+/* ---------------- rsvps ---------------- */
+
+export async function removeRsvp(formData: FormData) {
+  await requireAdmin();
+  await deleteRsvp(idFrom(formData));
+  revalidatePath("/admin/rsvps");
+}
+
+/** Spreadsheet-ready list of everyone who replied. */
+export async function rsvpCsv() {
+  await requireAdmin();
+  const rows = await getAllRsvps();
+  const cell = (value: string | number) =>
+    `"${String(value).replace(/"/g, '""')}"`;
+  return [
+    ["Name", "Phone", "Email", "People", "Replied"].map(cell).join(","),
+    ...rows.map((r) =>
+      [r.name, r.phone, r.email, r.guests, r.createdAt].map(cell).join(","),
+    ),
+  ].join("\n");
 }

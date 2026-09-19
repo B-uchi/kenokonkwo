@@ -444,3 +444,88 @@
   font-size: 13px;
   color: #4f7a3a;
 }
+
+/* rsvps */
+.admin-stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  margin: 22px 0 18px;
+  padding: 16px 20px;
+  border: 1px solid rgba(180, 137, 60, 0.24);
+  border-radius: 14px;
+  background: var(--cream);
+}
+.admin-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.admin-stat strong {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--brown);
+}
+.admin-stat span {
+  font-size: 13px;
+  color: var(--ink-60);
+}
+.admin-stats .admin-btn {
+  margin-left: auto;
+}
+
+.admin-rsvp {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) auto auto;
+  align-items: center;
+  gap: 8px 18px;
+}
+.admin-rsvp-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.admin-rsvp-main strong {
+  color: var(--brown);
+}
+.admin-rsvp-guests {
+  font-size: 12px;
+  color: var(--ink-50);
+}
+.admin-rsvp-contact {
+  display: flex;
+  flex-direction: column;
+  font-size: 13.5px;
+  overflow-wrap: anywhere;
+}
+.admin-rsvp time {
+  font-size: 12.5px;
+  color: var(--ink-50);
+  white-space: nowrap;
+}
+
+.admin-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--ink-60);
+}
+
+@media (max-width: 720px) {
+  .admin-rsvp {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .admin-rsvp-contact {
+    grid-column: 1 / -1;
+  }
+  .admin-stats .admin-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}

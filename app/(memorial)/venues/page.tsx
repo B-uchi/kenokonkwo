@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import RsvpModal from "../rsvp-modal";
 
 export const metadata: Metadata = {
   title: "Service & Venues",
@@ -109,6 +110,7 @@ export default function VenuesPage() {
             <a href="tel:+16313556425">631-355-6425</a>{" "}
             <span className="rsvp-name">(Dr Ralu)</span>
           </p>
+          <RsvpModal label="RSVP online" className="btn-gold rsvp-cta" />
         </section>
         <section className="info">
           <span className="label">Support</span>

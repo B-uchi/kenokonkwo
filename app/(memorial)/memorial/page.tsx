@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import HubCard from "./hub-card";
+import RsvpModal from "../rsvp-modal";
 import { getTributeCounts } from "@/lib/server/tributes";
 
 export const metadata: Metadata = {
@@ -101,6 +102,11 @@ export default async function HubPage() {
           </HubCard>
         ))}
       </nav>
+
+      <div className="hub-rsvp">
+        <p>Coming to the service?</p>
+        <RsvpModal label="Let the family know" className="btn-outline" />
+      </div>
 
       <p className="hub-thanks">
         Thank you for standing with the Okonkwo family during this time.
