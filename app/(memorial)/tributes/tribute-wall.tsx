@@ -288,7 +288,7 @@ function TributeModal({
               name="message"
               rows={6}
               required
-              maxLength={2000}
+              maxLength={20000}
               placeholder="Share a memory, a prayer, or a word of comfort…"
               value={message}
               onChange={(e) => setMessage(e.target.value)}

@@ -11,7 +11,9 @@ export async function submitTribute(formData: FormData): Promise<ActionState> {
   // honeypot: real visitors never see or fill this field
   if (text(formData, "website", 200)) return { ok: true, message: "" };
 
-  const message = text(formData, "message", 2000);
+  // generous cap: a safety rail against pasted junk, not a limit on what
+  // anyone would actually write (20,000 characters is ~3,500 words)
+  const message = text(formData, "message", 20000);
   if (message.length < 2) {
     return { ok: false, message: "Please write a short message." };
   }
