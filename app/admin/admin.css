@@ -529,3 +529,44 @@
     width: 100%;
   }
 }
+
+/* tribute cards: same two-column, clamped layout as the public page */
+.admin-list--tributes {
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .admin-list--tributes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* every card starts the same height: six lines of message */
+  .admin-list--tributes .admin-message {
+    min-height: calc(6 * 1.6em);
+  }
+}
+.admin-message.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.admin-list--tributes .tribute-more {
+  margin-top: 8px;
+}
+/* time on its own line, and a reserved block so a wrapped name can't
+   make one card taller than its row-mate */
+.admin-list--tributes .admin-card-meta {
+  align-content: start;
+  min-height: 62px;
+}
+.admin-list--tributes .admin-card-meta time {
+  width: 100%;
+  margin-left: 0;
+}
+.admin-list--tributes .admin-card {
+  display: flex;
+  flex-direction: column;
+}
+.admin-list--tributes .admin-actions {
+  margin-top: auto;
+  padding-top: 14px;
+}

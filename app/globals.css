@@ -2052,6 +2052,12 @@ html:has(.player) {
 .info--wide .btn-outline {
   margin-top: 16px;
 }
+.hotel-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-self: stretch;
+}
 .info p {
   margin: 12px 0 0;
   font-size: 15px;
@@ -2064,6 +2070,7 @@ html:has(.player) {
   .info-grid { gap: 14px; }
   .info--wide { margin-top: 14px; padding: 22px 20px; }
   .info--wide .btn-outline { align-self: stretch; }
+  .hotel-links { flex-direction: column; }
   .info { padding: 22px 20px; }
 }
 

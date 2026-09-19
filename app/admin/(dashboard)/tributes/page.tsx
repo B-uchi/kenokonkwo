@@ -5,6 +5,7 @@ import { getTributeCounts, getTributes } from "@/lib/server/tributes";
 import type { TributeStatus } from "@/lib/types";
 import { approveTribute, hideTribute, removeTribute } from "../../actions";
 import SubmitButton from "../submit-button";
+import TributeText from "./tribute-text";
 
 export const metadata: Metadata = {
   title: "Tributes",
@@ -61,7 +62,7 @@ export default async function AdminTributesPage({
       {tributes.length === 0 ? (
         <p className="admin-empty">{tab.empty}</p>
       ) : (
-        <ul className="admin-list">
+        <ul className="admin-list admin-list--tributes">
           {tributes.map((t) => (
             <li key={t.id} className="admin-card">
               <div className="admin-card-meta">
@@ -71,7 +72,7 @@ export default async function AdminTributesPage({
                   {formatDate.format(new Date(t.createdAt))}
                 </time>
               </div>
-              <p className="admin-message">{t.message}</p>
+              <TributeText message={t.message} />
               <div className="admin-actions">
                 {t.status !== "approved" && (
                   <form action={approveTribute}>

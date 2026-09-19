@@ -131,16 +131,27 @@ export default function VenuesPage() {
         <span className="label">Travelling in</span>
         <p>
           Rooms can be booked at the Radisson Hotel, Hauppauge &mdash; the same
-          venue as the Service of Songs.
+          venue as the Service of Songs. The Courtyard by Marriott in Islip is
+          another option nearby.
         </p>
-        <a
-          href="https://www.booking.com/hotel/us/radisson-hotel-hauppauge-long-island.en-gb.html"
-          target="_blank"
-          rel="noreferrer"
-          className="btn-outline"
-        >
-          Book a room
-        </a>
+        <div className="hotel-links">
+          <a
+            href="https://www.booking.com/hotel/us/radisson-hotel-hauppauge-long-island.en-gb.html"
+            target="_blank"
+            rel="noreferrer"
+            className="btn-outline"
+          >
+            Radisson, Hauppauge
+          </a>
+          <a
+            href="https://www.booking.com/hotel/us/courtyard-by-marriott-long-island-islip-courthouse-complex.html"
+            target="_blank"
+            rel="noreferrer"
+            className="btn-outline"
+          >
+            Courtyard by Marriott, Islip
+          </a>
+        </div>
       </section>
     </div>
   );
