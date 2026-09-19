@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { requireAdmin } from "@/lib/server/auth";
-import { getPhotos } from "@/lib/server/photos";
+import {
+  countPhotos,
+  getPhotosPage,
+  PHOTOS_PER_PAGE,
+} from "@/lib/server/photos";
 import {
   deletePhoto,
   movePhotoDown,
@@ -10,22 +14,32 @@ import {
 } from "../../actions";
 import SubmitButton from "../submit-button";
 import PhotoUploader from "./photo-uploader";
+import Pager from "../pager";
 
 export const metadata: Metadata = {
   title: "Photos",
 };
 
-export default async function AdminPhotosPage() {
+export default async function AdminPhotosPage({
+  searchParams,
+}: PageProps<"/admin/photos">) {
   await requireAdmin();
-  const photos = await getPhotos();
+  const { page: rawPage } = await searchParams;
+  const page = Math.max(1, Number(rawPage) || 1);
+  const [total, photos] = await Promise.all([
+    countPhotos(),
+    getPhotosPage(page),
+  ]);
+  const pages = Math.max(1, Math.ceil(total / PHOTOS_PER_PAGE));
+  const offset = (page - 1) * PHOTOS_PER_PAGE;
 
   return (
     <>
       <div className="admin-title">
         <h1>Photos</h1>
         <p>
-          {photos.length} {photos.length === 1 ? "photo" : "photos"} in the
-          gallery. The order here is the order visitors see.
+          {total} {total === 1 ? "photo" : "photos"} in the gallery. The order
+          here is the order visitors see.
         </p>
       </div>
 
@@ -34,7 +48,8 @@ export default async function AdminPhotosPage() {
       {photos.length === 0 ? (
         <p className="admin-empty">No photos yet — add some above.</p>
       ) : (
-        <ol className="admin-list">
+        <>
+          <ol className="admin-list">
           {photos.map((p, i) => (
             <li key={p.id} className="admin-card admin-photo">
               <div className="admin-thumb">
@@ -60,11 +75,13 @@ export default async function AdminPhotosPage() {
               <div className="admin-actions">
                 <form action={movePhotoUp}>
                   <input type="hidden" name="id" value={p.id} />
-                  <SubmitButton label="Move up" disabled={i === 0}>↑</SubmitButton>
+                  <SubmitButton label="Move up" disabled={offset + i === 0}>
+                    ↑
+                  </SubmitButton>
                 </form>
                 <form action={movePhotoDown}>
                   <input type="hidden" name="id" value={p.id} />
-                  <SubmitButton label="Move down" disabled={i === photos.length - 1}>
+                  <SubmitButton label="Move down" disabled={offset + i === total - 1}>
                     ↓
                   </SubmitButton>
                 </form>
@@ -80,7 +97,9 @@ export default async function AdminPhotosPage() {
               </div>
             </li>
           ))}
-        </ol>
+          </ol>
+          <Pager page={page} pages={pages} href={(n) => `/admin/photos?page=${n}`} />
+        </>
       )}
     </>
   );

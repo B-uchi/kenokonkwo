@@ -13,10 +13,12 @@ import type { Tribute } from "@/lib/types";
 import { submitTribute } from "./actions";
 
 const CLOSE_MS = 260;
+const BATCH = 12;
 
 type ModalHandle = { open: () => void };
 
 export default function TributeWall({ tributes }: { tributes: Tribute[] }) {
+  const [shown, setShown] = useState(BATCH);
   const [thanks, setThanks] = useState(false);
   const modalRef = useRef<ModalHandle>(null);
   const openModal = () => modalRef.current?.open();
@@ -54,9 +56,24 @@ export default function TributeWall({ tributes }: { tributes: Tribute[] }) {
         </div>
       ) : (
         <div className="tribute-list">
-          {tributes.map((t) => (
+          {tributes.slice(0, shown).map((t) => (
             <TributeCard key={t.id} tribute={t} />
           ))}
+        </div>
+      )}
+
+      {count > shown && (
+        <div className="tributes-more">
+          <button
+            type="button"
+            className="btn-outline"
+            onClick={() => setShown((n) => n + BATCH)}
+          >
+            Show more tributes
+          </button>
+          <span>
+            Showing {shown} of {count}
+          </span>
         </div>
       )}
 

@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/server/auth";
-import { getTributeCounts, getTributes } from "@/lib/server/tributes";
+import {
+  getTributeCounts,
+  getTributesPage,
+  TRIBUTES_PER_PAGE,
+} from "@/lib/server/tributes";
 import type { TributeStatus } from "@/lib/types";
 import { approveTribute, hideTribute, removeTribute } from "../../actions";
 import SubmitButton from "../submit-button";
 import TributeText from "./tribute-text";
+import Pager from "../pager";
 
 export const metadata: Metadata = {
   title: "Tributes",
@@ -29,12 +34,14 @@ export default async function AdminTributesPage({
 }: PageProps<"/admin/tributes">) {
   await requireAdmin();
 
-  const { status: requested } = await searchParams;
+  const { status: requested, page: rawPage } = await searchParams;
   const tab = tabs.find((t) => t.status === requested) ?? tabs[0];
+  const page = Math.max(1, Number(rawPage) || 1);
   const [tributes, counts] = await Promise.all([
-    getTributes(tab.status),
+    getTributesPage(tab.status, page),
     getTributeCounts(),
   ]);
+  const pages = Math.max(1, Math.ceil(counts[tab.status] / TRIBUTES_PER_PAGE));
 
   return (
     <>
@@ -62,7 +69,8 @@ export default async function AdminTributesPage({
       {tributes.length === 0 ? (
         <p className="admin-empty">{tab.empty}</p>
       ) : (
-        <ul className="admin-list admin-list--tributes">
+        <>
+          <ul className="admin-list admin-list--tributes">
           {tributes.map((t) => (
             <li key={t.id} className="admin-card">
               <div className="admin-card-meta">
@@ -104,7 +112,13 @@ export default async function AdminTributesPage({
               </div>
             </li>
           ))}
-        </ul>
+          </ul>
+          <Pager
+            page={page}
+            pages={pages}
+            href={(n) => `/admin/tributes?status=${tab.status}&page=${n}`}
+          />
+        </>
       )}
     </>
   );

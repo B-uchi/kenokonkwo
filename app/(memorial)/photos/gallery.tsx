@@ -25,6 +25,8 @@ const SLIDE_MS = 5000;
 const IDLE_MS = 2600;
 /** how many photos either side of the current one to fetch ahead */
 const PRELOAD_WINDOW = 3;
+/** grid tiles shown before "Show more" */
+const TILE_BATCH = 24;
 const DEFAULT_ALT = "Photograph of Elder Chuka Ken Okonkwo";
 
 type Item = Photo & {
@@ -107,6 +109,7 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
   const [pos, setPos] = useState<Pos>({ index: 0, prev: 0 });
   const [playerOpen, setPlayerOpen] = useState(false);
   const [warm, setWarm] = useState(false);
+  const [tiles, setTiles] = useState(TILE_BATCH);
 
   const ready = usePreloaded(
     items,
@@ -197,19 +200,36 @@ export default function PhotoGallery({ photos }: { photos: Photo[] }) {
       )}
 
       {view === "grid" || n === 0 ? (
-        <div className="photo-grid">
-          {items.map((it, i) => (
-            <button
-              key={it.id}
-              type="button"
-              className="photo"
-              aria-label={`View ${it.alt}`}
-              onClick={() => showWide(i)}
-            >
-              <Image src={it.url} alt="" fill sizes={TILE_SIZES} />
-            </button>
-          ))}
-        </div>
+        <>
+          <div className="photo-grid">
+            {items.slice(0, tiles).map((it, i) => (
+              <button
+                key={it.id}
+                type="button"
+                className="photo"
+                aria-label={`View ${it.alt}`}
+                onClick={() => showWide(i)}
+              >
+                <Image src={it.url} alt="" fill sizes={TILE_SIZES} />
+              </button>
+            ))}
+          </div>
+
+          {n > tiles && (
+            <div className="tributes-more">
+              <button
+                type="button"
+                className="btn-outline"
+                onClick={() => setTiles((t) => t + TILE_BATCH)}
+              >
+                Show more photographs
+              </button>
+              <span>
+                Showing {tiles} of {n}
+              </span>
+            </div>
+          )}
+        </>
       ) : (
         <FlipBook
           items={items}

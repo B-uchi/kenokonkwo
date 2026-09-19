@@ -20,6 +20,18 @@ const toTribute = (r: Row): Tribute => ({
   createdAt: new Date(r.created_at).toISOString(),
 });
 
+export const TRIBUTES_PER_PAGE = 12;
+
+export async function getTributesPage(status: TributeStatus, page: number) {
+  const rows = (await sql`
+    select id, name, relation, message, status, created_at
+    from tributes
+    where status = ${status}
+    order by created_at desc
+    limit ${TRIBUTES_PER_PAGE} offset ${(page - 1) * TRIBUTES_PER_PAGE}`) as Row[];
+  return rows.map(toTribute);
+}
+
 export async function getTributes(status: TributeStatus) {
   const rows = (await sql`
     select id, name, relation, message, status, created_at

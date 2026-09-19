@@ -11,6 +11,22 @@ type Row = {
   caption: string;
 };
 
+export const PHOTOS_PER_PAGE = 24;
+
+export async function countPhotos() {
+  const [row] = (await sql`select count(*)::int as count from photos`) as { count: number }[];
+  return row?.count ?? 0;
+}
+
+export async function getPhotosPage(page: number) {
+  const rows = (await sql`
+    select id, key, width, height, caption
+    from photos
+    order by position, created_at
+    limit ${PHOTOS_PER_PAGE} offset ${(page - 1) * PHOTOS_PER_PAGE}`) as Row[];
+  return rows.map((r) => ({ ...r, url: publicUrl(r.key) }));
+}
+
 export async function getPhotos(): Promise<(Photo & { key: string })[]> {
   const rows = (await sql`
     select id, key, width, height, caption
