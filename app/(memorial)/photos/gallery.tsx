@@ -14,11 +14,17 @@ import type { Photo } from "@/lib/types";
 import { preloadImage } from "./preload";
 import { requestAmbientPlay } from "@/lib/ambient";
 
-/** one size for wide + fullscreen so both share a single download per photo */
-const VIEW_SIZES = "100vw";
+/**
+ * One size for wide + fullscreen so both share a single download per photo.
+ * Kept close to the real display size: asking for 100vw made Vercel generate
+ * (and bill for) far larger images than the page ever shows.
+ */
+const VIEW_SIZES = "(max-width: 768px) 92vw, 1100px";
 const TILE_SIZES = "(max-width: 560px) 50vw, 260px";
 const SLIDE_MS = 5000;
 const IDLE_MS = 2600;
+/** how many photos either side of the current one to fetch ahead */
+const PRELOAD_WINDOW = 3;
 const DEFAULT_ALT = "Photograph of Elder Chuka Ken Okonkwo";
 
 type Item = Photo & {
@@ -48,8 +54,11 @@ function usePreloaded(items: Item[], enabled: boolean, from: number) {
     const n = items.length;
     if (!enabled || n === 0) return;
     let alive = true;
+    // only the neighbours — with a large gallery, preloading everything is a
+    // huge download for the visitor and a big bill for the image optimizer
     const order = items
       .map((_, i) => i)
+      .filter((i) => Math.abs(loopOffset(i, from, n)) <= PRELOAD_WINDOW)
       .sort(
         (a, b) =>
           Math.abs(loopOffset(a, from, n)) - Math.abs(loopOffset(b, from, n)),
@@ -284,6 +293,8 @@ function FlipBook({
           const off = loopOffset(i, index, n);
           const was = loopOffset(i, prev, n);
           const dist = Math.abs(off);
+          // only the current page and its neighbours exist in the DOM
+          if (dist > 2 && Math.abs(was) > 2) return null;
           const side = Math.max(-1, Math.min(1, off));
           const style = {
             "--x": Math.max(-2, Math.min(2, off)),
