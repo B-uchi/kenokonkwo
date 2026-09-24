@@ -1179,6 +1179,65 @@ textarea.field {
   letter-spacing: 0.12em;
   color: var(--ink-60);
 }
+.bio-byline {
+  margin: 12px 0 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-60);
+}
+.bio-byline span {
+  font-style: normal;
+  color: var(--brown);
+}
+
+.bio-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 22px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.bio-index a {
+  color: var(--gold-text);
+  font-weight: 600;
+}
+.bio-index span {
+  color: var(--ink-45);
+}
+
+/* the second account — a different voice, not a new chapter */
+.bio-second {
+  margin-top: clamp(56px, 8vw, 88px);
+  scroll-margin-top: 90px;
+}
+.bio-second-rule {
+  height: 3px;
+  margin-bottom: clamp(40px, 6vw, 60px);
+  border-top: 1px solid rgba(180, 137, 60, 0.45);
+  border-bottom: 1px solid rgba(180, 137, 60, 0.45);
+  background: transparent;
+}
+.bio-second-head {
+  text-align: center;
+}
+.bio-second-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(26px, 4.2vw, 36px);
+  line-height: 1.2;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.bio-second .bio-content > :first-child {
+  margin-top: clamp(26px, 4vw, 34px);
+}
+
 .bio-rule {
   width: 180px;
   margin: 26px auto 0;

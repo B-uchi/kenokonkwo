@@ -34,6 +34,13 @@ create table if not exists biography (
   updated_at timestamptz not null default now()
 );
 
+-- added later: optional author, plus a second account (his sister's)
+alter table biography add column if not exists author text not null default '';
+alter table biography add column if not exists second_title text not null default '';
+alter table biography add column if not exists second_author text not null default '';
+alter table biography add column if not exists second_body jsonb not null default '{"type":"doc","content":[]}'::jsonb;
+alter table biography add column if not exists second_visible boolean not null default false;
+
 insert into biography (id) values (1) on conflict (id) do nothing;
 
 create table if not exists rsvps (

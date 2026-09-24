@@ -9,50 +9,67 @@ import {
 import StarterKit from "@tiptap/starter-kit";
 import { useState, useTransition, type ReactNode } from "react";
 import type { RichTextDoc } from "@/lib/rich-text";
+import type { BiographyAccount } from "@/lib/server/biography";
 import { updateBiography } from "./actions";
 
+/** structure only: no colour, font or size controls anywhere */
+const extensions = [
+  StarterKit.configure({
+    code: false,
+    codeBlock: false,
+    strike: false,
+    heading: { levels: [2, 3] },
+    link: {
+      openOnClick: false,
+      autolink: true,
+      HTMLAttributes: { rel: "noreferrer", target: "_blank" },
+    },
+  }),
+];
+
+function useStoryEditor(content: RichTextDoc, label: string) {
+  return useEditor({
+    immediatelyRender: false, // rendered on the client only
+    extensions,
+    content,
+    editorProps: { attributes: { class: "bio-content", "aria-label": label } },
+  });
+}
+
 export default function BiographyEditor({
-  title: initialTitle,
-  body,
+  main,
+  second,
 }: {
-  title: string;
-  body: RichTextDoc;
+  main: BiographyAccount;
+  second: BiographyAccount & { visible: boolean };
 }) {
-  const [title, setTitle] = useState(initialTitle);
+  const [title, setTitle] = useState(main.title);
+  const [author, setAuthor] = useState(main.author);
+  const [secondTitle, setSecondTitle] = useState(second.title);
+  const [secondAuthor, setSecondAuthor] = useState(second.author);
+  const [secondVisible, setSecondVisible] = useState(second.visible);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [pending, startTransition] = useTransition();
 
-  const editor = useEditor({
-    immediatelyRender: false, // rendered on the client only
-    extensions: [
-      StarterKit.configure({
-        // structure only: no colour, font or size controls anywhere
-        code: false,
-        codeBlock: false,
-        strike: false,
-        heading: { levels: [2, 3] },
-        link: {
-          openOnClick: false,
-          autolink: true,
-          HTMLAttributes: { rel: "noreferrer", target: "_blank" },
-        },
-      }),
-    ],
-    content: body,
-    editorProps: {
-      attributes: { class: "bio-content", "aria-label": "Biography text" },
-    },
-  });
+  const mainEditor = useStoryEditor(main.body, "Biography text");
+  const secondEditor = useStoryEditor(second.body, "Second account text");
 
   function save() {
-    if (!editor || pending) return;
+    if (!mainEditor || !secondEditor || pending) return;
     setError("");
     setStatus("");
     startTransition(async () => {
       const result = await updateBiography({
         title,
-        body: JSON.stringify(editor.getJSON()),
+        author,
+        body: JSON.stringify(mainEditor.getJSON()),
+        second: {
+          title: secondTitle,
+          author: secondAuthor,
+          body: JSON.stringify(secondEditor.getJSON()),
+          visible: secondVisible,
+        },
       });
       if (result?.ok) setStatus("Saved");
       else setError(result?.message ?? "Could not save.");
@@ -61,25 +78,75 @@ export default function BiographyEditor({
 
   return (
     <div className="admin-editor">
-      <label className="admin-field">
-        <span>Title</span>
-        <input
-          className="field admin-title-input"
-          value={title}
-          maxLength={120}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="A life of service"
-        />
-      </label>
+      <section className="admin-account">
+        <h2 className="admin-account-head">The family&rsquo;s account</h2>
 
-      <div className="admin-field">
-        <span>Story</span>
-        {editor && <Toolbar editor={editor} />}
+        <label className="admin-field">
+          <span>Title</span>
+          <input
+            className="field admin-title-input"
+            value={title}
+            maxLength={160}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="A life of service"
+          />
+        </label>
 
-        <div className="admin-editor-surface">
-          <EditorContent editor={editor} />
+        <label className="admin-field">
+          <span>
+            Author <em>— optional, shown as &ldquo;As remembered by …&rdquo;</em>
+          </span>
+          <input
+            className="field"
+            value={author}
+            maxLength={120}
+            onChange={(e) => setAuthor(e.target.value)}
+            placeholder="Leave empty for no byline"
+          />
+        </label>
+
+        <Story editor={mainEditor} />
+      </section>
+
+      <section className="admin-account">
+        <div className="admin-account-head">
+          <h2>His sister&rsquo;s account</h2>
+          <label className="admin-switch">
+            <input
+              type="checkbox"
+              checked={secondVisible}
+              onChange={(e) => setSecondVisible(e.target.checked)}
+            />
+            <span>{secondVisible ? "Shown on the site" : "Hidden"}</span>
+          </label>
         </div>
-      </div>
+
+        <label className="admin-field">
+          <span>Her title for the piece</span>
+          <input
+            className="field admin-title-input"
+            value={secondTitle}
+            maxLength={160}
+            onChange={(e) => setSecondTitle(e.target.value)}
+            placeholder="The title on her document"
+          />
+        </label>
+
+        <label className="admin-field">
+          <span>
+            Author <em>— shown as &ldquo;As remembered by …&rdquo;</em>
+          </span>
+          <input
+            className="field"
+            value={secondAuthor}
+            maxLength={120}
+            onChange={(e) => setSecondAuthor(e.target.value)}
+            placeholder="e.g. his elder sister, Mrs …"
+          />
+        </label>
+
+        <Story editor={secondEditor} />
+      </section>
 
       {error && (
         <p className="form-error" role="alert">
@@ -99,6 +166,18 @@ export default function BiographyEditor({
         <span className="admin-saved" role="status">
           {status}
         </span>
+      </div>
+    </div>
+  );
+}
+
+function Story({ editor }: { editor: Editor | null }) {
+  return (
+    <div className="admin-field">
+      <span>Story</span>
+      {editor && <Toolbar editor={editor} />}
+      <div className="admin-editor-surface">
+        <EditorContent editor={editor} />
       </div>
     </div>
   );

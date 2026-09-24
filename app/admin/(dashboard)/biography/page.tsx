@@ -9,19 +9,19 @@ export const metadata: Metadata = {
 
 export default async function AdminBiographyPage() {
   await requireAdmin();
-  const { title, body } = await getBiography();
+  const { main, second } = await getBiography();
 
   return (
     <>
       <div className="admin-title">
         <h1>Biography</h1>
         <p>
-          The title and story shown on the Biography page. Formatting uses the
-          site&rsquo;s own fonts and colours.
+          The story shown on the Biography page. The second account appears
+          below the family&rsquo;s, once you switch it on.
         </p>
       </div>
 
-      <BiographyEditor title={title} body={body} />
+      <BiographyEditor main={main} second={second} />
     </>
   );
 }

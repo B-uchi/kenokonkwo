@@ -570,3 +570,62 @@
   margin-top: auto;
   padding-top: 14px;
 }
+
+/* biography: two accounts on one page */
+.admin-account {
+  padding: clamp(18px, 3vw, 26px);
+  border: 1px solid rgba(180, 137, 60, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 253, 248, 0.5);
+}
+.admin-account + .admin-account {
+  margin-top: 8px;
+}
+.admin-account-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(180, 137, 60, 0.25);
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 21px;
+  color: var(--brown);
+}
+.admin-account-head h2 {
+  margin: 0;
+  font: inherit;
+}
+.admin-account .admin-field + .admin-field {
+  margin-top: 16px;
+}
+.admin-field > span em {
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink-45);
+}
+
+.admin-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-60);
+  cursor: pointer;
+}
+.admin-switch input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+.admin-switch input:checked + span {
+  color: #4f7a3a;
+}
