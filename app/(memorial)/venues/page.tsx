@@ -33,7 +33,7 @@ const usEvents: Event[] = [
     mapsQuery: "Radisson Hotel Hauppauge-Long Island",
   },
   {
-    name: "Funeral Viewing & Service (Dress code: All White)",
+    name: "Funeral Viewing, Service (Dress code: All White) & Internment",
     date: { weekday: "Sat", day: "10", month: "Oct 2026", full: "Saturday, 10 October 2026" },
     times: ["Viewing 8:00 AM", "Service 10:00 AM"],
     venue: {
@@ -47,22 +47,30 @@ const usEvents: Event[] = [
   {
     name: "Thanksgiving Service",
     date: { weekday: "Sun", day: "11", month: "Oct 2026", full: "Sunday, 11 October 2026" },
-    times: [],
-    note: "Venue and time will be shared soon.",
+    times: ["9:00 AM"],
   },
 ];
 
 const ngEvents: Event[] = [
   {
-    name: "Burial",
-    times: [],
-    note: "Time will be updated soon. Please check back later.",
+    name: "Celebration of life",
+    times: ["10:00 AM"],
     venue: {
       name: "Ken Okonkwo’s Compound",
       lines: ["Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
     },
     region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
-    date: { weekday: "Fri", day: "11", month: "Dec 2026", full: "Friday, 11 December 2026" },
+    date: { weekday: "Sat", day: "12", month: "Dec 2026", full: "Saturday, 12 December 2026" },
+  },
+  {
+    name: "Thanksgiving",
+    times: ["09:00 AM"],
+    venue: {
+      name: "St. Barnabas Anglican Church",
+      lines: ["Obosi, Idemili North LGA, Anambra State"],
+    },
+    region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
+    date: { weekday: "Sun", day: "13", month: "Dec 2026", full: "Sunday, 13 December 2026" },
   },
 ];
 
@@ -89,7 +97,7 @@ export default function VenuesPage() {
       <section className="country" aria-labelledby="country-ng">
         <header className="country-head">
           <span className="label">Nigeria</span>
-          <h2 id="country-ng">Laid to rest at home in Obosi</h2>
+          <h2 id="country-ng">Celebration of life and condolence visit at his hometown, Obosi</h2>
         </header>
         <ol className="events">
           {ngEvents.map((e) => (

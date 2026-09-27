@@ -79,7 +79,7 @@ export default function BiographyEditor({
   return (
     <div className="admin-editor">
       <section className="admin-account">
-        <h2 className="admin-account-head">The family&rsquo;s account</h2>
+        <h2 className="admin-account-head">His Children&rsquo;s account</h2>
 
         <label className="admin-field">
           <span>Title</span>
