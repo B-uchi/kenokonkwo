@@ -44,10 +44,17 @@ const usEvents: Event[] = [
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2995.7738315395177!2d-73.18393328860225!3d40.7327586362256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e83475ee810e03%3A0x100b485ad88ed6dd!2sChapey%20%26%20Sons%20Funeral%20%26%20Cremation%20Care!5e0!3m2!1sen!2sng!4v1789645618682!5m2!1sen!2sng",
     mapsQuery: "Chapey & Sons Funeral Home, 200 E Main Street, East Islip, NY 11730",
   },
-  {
+    {
     name: "Thanksgiving Service",
     date: { weekday: "Sun", day: "11", month: "Oct 2026", full: "Sunday, 11 October 2026" },
-    times: ["9:00 AM"],
+    times: ["8 - 10 AM"],
+    venue: {
+      name: "Emmanuel Anglican Church Long Island",
+      lines: ["Holding at New Bethany Baptist Church", "510 Commack Rd", "Islip, NY 11752"],
+    },
+    embed:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.4140187668563!2d-73.22957358860123!3d40.752917834990704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e833cd702146eb%3A0x820e337ce9a50b71!2sNew%20Bethany%20Baptist%20Church!5e0!3m2!1sen!2sng!4v1790595886063!5m2!1sen!2sng",
+    mapsQuery: "Bethany Baptist Church, 510 Commack Rd, Islip, NY 11752",
   },
 ];
 
