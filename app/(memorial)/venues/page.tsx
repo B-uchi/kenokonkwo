@@ -24,7 +24,7 @@ const mapsLink = (q: string) =>
 
 const usEvents: Event[] = [
   {
-    name: "Service of Songs",
+    name: "Service of Songs (Dress code: All White)",
     date: { weekday: "Fri", day: "9", month: "Oct 2026", full: "Friday, 9 October 2026" },
     times: ["6:00 PM"],
     venue: { name: "Radisson Hotel", lines: ["Grand Ballroom", "Hauppauge, NY"] },
@@ -45,7 +45,7 @@ const usEvents: Event[] = [
     mapsQuery: "Chapey & Sons Funeral Home, 200 E Main Street, East Islip, NY 11730",
   },
     {
-    name: "Thanksgiving Service",
+    name: "Thanksgiving Service (Dress code: All White)",
     date: { weekday: "Sun", day: "11", month: "Oct 2026", full: "Sunday, 11 October 2026" },
     times: ["8 - 10 AM"],
     venue: {
