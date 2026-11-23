@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import portrait from "@/assets/ken-okonkwo.jpeg";
+import portrait from "@/assets/new-landing-circle.png";
 
 export default function IntroPage() {
   return (
@@ -26,10 +26,10 @@ export default function IntroPage() {
           </div>
         </div>
 
-        <p className="hero-eyebrow">In Loving Memory</p>
+        <p className="hero-eyebrow">In Loving Memory of our dad</p>
 
-        <h1 className="hero-name">Elder Chuka Ken Okonkwo</h1>
-        <p className="hero-alias">(Captain Ken)</p>
+        <h1 className="hero-name">Elder Ken Chuka Okonkwo</h1>
+        <p className="hero-alias">(Morecab)</p>
 
         <div className="gold-rule hero-rule" />
 

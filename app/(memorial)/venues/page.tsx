@@ -25,16 +25,29 @@ const mapsLink = (q: string) =>
 const usEvents: Event[] = [
   {
     name: "Service of Songs (Dress code: All White)",
-    date: { weekday: "Fri", day: "9", month: "Oct 2026", full: "Friday, 9 October 2026" },
+    date: {
+      weekday: "Fri",
+      day: "9",
+      month: "Oct 2026",
+      full: "Friday, 9 October 2026",
+    },
     times: ["6:00 PM"],
-    venue: { name: "Radisson Hotel", lines: ["Grand Ballroom", "Hauppauge, NY"] },
+    venue: {
+      name: "Radisson Hotel",
+      lines: ["Grand Ballroom", "Hauppauge, NY"],
+    },
     embed:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2992.4371805494025!2d-73.2644266!3d40.80680939999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e831cd6f588ce9%3A0xb2932a1078f343e2!2sRadisson%20Hotel%20Hauppauge-Long%20Island!5e0!3m2!1sen!2sng!4v1789645575447!5m2!1sen!2sng",
     mapsQuery: "Radisson Hotel Hauppauge-Long Island",
   },
   {
     name: "Funeral Viewing, Service (Dress code: All White) & Internment",
-    date: { weekday: "Sat", day: "10", month: "Oct 2026", full: "Saturday, 10 October 2026" },
+    date: {
+      weekday: "Sat",
+      day: "10",
+      month: "Oct 2026",
+      full: "Saturday, 10 October 2026",
+    },
     times: ["Viewing 8:00 AM", "Service 10:00 AM"],
     venue: {
       name: "Chapey & Sons Funeral Home",
@@ -42,15 +55,25 @@ const usEvents: Event[] = [
     },
     embed:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2995.7738315395177!2d-73.18393328860225!3d40.7327586362256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e83475ee810e03%3A0x100b485ad88ed6dd!2sChapey%20%26%20Sons%20Funeral%20%26%20Cremation%20Care!5e0!3m2!1sen!2sng!4v1789645618682!5m2!1sen!2sng",
-    mapsQuery: "Chapey & Sons Funeral Home, 200 E Main Street, East Islip, NY 11730",
+    mapsQuery:
+      "Chapey & Sons Funeral Home, 200 E Main Street, East Islip, NY 11730",
   },
-    {
+  {
     name: "Thanksgiving Service (Dress code: All White)",
-    date: { weekday: "Sun", day: "11", month: "Oct 2026", full: "Sunday, 11 October 2026" },
+    date: {
+      weekday: "Sun",
+      day: "11",
+      month: "Oct 2026",
+      full: "Sunday, 11 October 2026",
+    },
     times: ["8 - 10 AM"],
     venue: {
       name: "Emmanuel Anglican Church Long Island",
-      lines: ["Holding at New Bethany Baptist Church", "510 Commack Rd", "Islip, NY 11752"],
+      lines: [
+        "Holding at New Bethany Baptist Church",
+        "510 Commack Rd",
+        "Islip, NY 11752",
+      ],
     },
     embed:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.4140187668563!2d-73.22957358860123!3d40.752917834990704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e833cd702146eb%3A0x820e337ce9a50b71!2sNew%20Bethany%20Baptist%20Church!5e0!3m2!1sen!2sng!4v1790595886063!5m2!1sen!2sng",
@@ -60,14 +83,34 @@ const usEvents: Event[] = [
 
 const ngEvents: Event[] = [
   {
+    name: "Night of Praise",
+    times: ["5pm - 7pm"],
+    venue: {
+      name: "Ken Okonkwo’s Compound",
+      lines: ["Ugwueke, Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
+    },
+    region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
+    date: {
+      weekday: "Fri",
+      day: "11",
+      month: "Dec 2026",
+      full: "Friday, 11 December 2026",
+    },
+  },
+    {
     name: "Celebration of life",
     times: ["10:00 AM"],
     venue: {
       name: "Ken Okonkwo’s Compound",
-      lines: ["Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
+      lines: ["Ugwueke, Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
     },
     region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
-    date: { weekday: "Sat", day: "12", month: "Dec 2026", full: "Saturday, 12 December 2026" },
+    date: {
+      weekday: "Sat",
+      day: "12",
+      month: "Dec 2026",
+      full: "Saturday, 12 December 2026",
+    },
   },
   {
     name: "Thanksgiving",
@@ -77,7 +120,12 @@ const ngEvents: Event[] = [
       lines: ["Obosi, Idemili North LGA, Anambra State"],
     },
     region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
-    date: { weekday: "Sun", day: "13", month: "Dec 2026", full: "Sunday, 13 December 2026" },
+    date: {
+      weekday: "Sun",
+      day: "13",
+      month: "Dec 2026",
+      full: "Sunday, 13 December 2026",
+    },
   },
 ];
 
@@ -89,7 +137,21 @@ export default function VenuesPage() {
         <h1 className="page-title">Where we gather to remember him</h1>
       </div>
 
-      <section className="country" aria-labelledby="country-us">
+      <section className="country" aria-labelledby="country-ng">
+        <header className="country-head">
+          <span className="label">Nigeria</span>
+          <h2 id="country-ng">
+            Celebration of life and condolence visit at his hometown, Obosi
+          </h2>
+        </header>
+        <ol className="events">
+          {ngEvents.map((e) => (
+            <EventRow key={e.name} event={e} />
+          ))}
+        </ol>
+      </section>
+
+      <section className="country is-past" aria-labelledby="country-us">
         <header className="country-head">
           <span className="label">United States</span>
           <h2 id="country-us">Three days on Long Island, New York</h2>
@@ -101,33 +163,18 @@ export default function VenuesPage() {
         </ol>
       </section>
 
-      <section className="country" aria-labelledby="country-ng">
-        <header className="country-head">
-          <span className="label">Nigeria</span>
-          <h2 id="country-ng">Celebration of life and condolence visit at his hometown, Obosi</h2>
-        </header>
-        <ol className="events">
-          {ngEvents.map((e) => (
-            <EventRow key={e.name} event={e} />
-          ))}
-        </ol>
-      </section>
-
       <div className="info-grid">
         <section className="info">
           <span className="label">RSVP</span>
           <p>
-            Kindly RSVP by 30 September 2026
+            RSVP
             <br />
-            <a href="tel:+14389780714">438-978-0714</a>{" "}
+            <a href="tel:+2348038885161">0803-888-5161</a>{" "}
             <span className="rsvp-name">(Dili)</span>
-            <br />
-            <a href="tel:+16313556425">631-355-6425</a>{" "}
-            <span className="rsvp-name">(Dr Ralu)</span>
           </p>
           <RsvpModal label="RSVP online" className="btn-gold rsvp-cta" />
         </section>
-        <section className="info">
+        <section className="info is-past">
           <span className="label">Support</span>
           <p>
             Support is welcomed via
@@ -142,7 +189,7 @@ export default function VenuesPage() {
         </section>
       </div>
 
-      <section className="info info--wide">
+      <section className="info info--wide is-past">
         <span className="label">Travelling in</span>
         <p>
           Rooms can be booked at the Radisson Hotel, Hauppauge &mdash; the same
@@ -247,7 +294,16 @@ function LocationPanel({ event: e }: { event: Event }) {
   return (
     <div className="location-panel">
       <span className="location-pin" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M12 21 C12 21 18.5 15.4 18.5 10.5 A6.5 6.5 0 0 0 5.5 10.5 C5.5 15.4 12 21 12 21 Z" />
           <circle cx="12" cy="10.3" r="2.4" />
         </svg>
