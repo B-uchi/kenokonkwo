@@ -167,7 +167,6 @@ export default function VenuesPage() {
         <section className="info">
           <span className="label">RSVP</span>
           <p>
-            RSVP
             <br />
             <a href="tel:+2348038885161">0803-888-5161</a>{" "}
             <span className="rsvp-name">(Dili)</span>
