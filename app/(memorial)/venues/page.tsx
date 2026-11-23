@@ -89,13 +89,15 @@ const ngEvents: Event[] = [
       name: "Ken Okonkwo’s Compound",
       lines: ["Ugwueke, Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
     },
-    region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
     date: {
       weekday: "Fri",
       day: "11",
       month: "Dec 2026",
       full: "Friday, 11 December 2026",
     },
+    embed:
+      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d982.7297771589164!2d6.839756728453643!3d6.120288733076158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwMDcnMTMuMCJOIDbCsDUwJzI1LjUiRQ!5e1!3m2!1sen!2sng!4v1795444219131!5m2!1sen!2sng",
+    mapsQuery: "6°07'13.0\"N 6°50'25.5\"E",
   },
     {
     name: "Celebration of life",
@@ -104,13 +106,15 @@ const ngEvents: Event[] = [
       name: "Ken Okonkwo’s Compound",
       lines: ["Ugwueke, Mmakwum Village, Obosi", "Idemili North LGA, Anambra State"],
     },
-    region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
     date: {
       weekday: "Sat",
       day: "12",
       month: "Dec 2026",
       full: "Saturday, 12 December 2026",
     },
+    embed:
+      "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d982.7297771589164!2d6.839756728453643!3d6.120288733076158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNsKwMDcnMTMuMCJOIDbCsDUwJzI1LjUiRQ!5e1!3m2!1sen!2sng!4v1795444219131!5m2!1sen!2sng",
+    mapsQuery: "6°07'13.0\"N 6°50'25.5\"E",
   },
   {
     name: "Thanksgiving",
@@ -119,13 +123,15 @@ const ngEvents: Event[] = [
       name: "St. Barnabas Anglican Church",
       lines: ["Obosi, Idemili North LGA, Anambra State"],
     },
-    region: { title: "Obosi", subtitle: "Anambra State, Nigeria" },
     date: {
       weekday: "Sun",
       day: "13",
       month: "Dec 2026",
       full: "Sunday, 13 December 2026",
     },
+    embed:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d297.323501623095!2d6.8414035541851765!3d6.123584270977012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1043919111d28d59%3A0x28ca75d26a5f35f3!2sSt%20Barnabas%20Anglican%20church!5e1!3m2!1sen!2sng!4v1795444271997!5m2!1sen!2sng",
+    mapsQuery: "St Barnabas Anglican Church, Obosi, Anambra State",
   },
 ];
 
