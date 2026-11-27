@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import portrait from "@/assets/ken-okonkwo.jpeg";
+import portrait from "@/assets/new-landing-circle.png";
 import AmbientAudio from "./ambient-audio";
 
 export default function MemorialLayout({ children }: LayoutProps<"/">) {

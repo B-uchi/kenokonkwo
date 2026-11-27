@@ -380,6 +380,15 @@ img {
   color: rgba(107, 74, 34, 0.78);
   animation: flIn 1200ms ease-out 2400ms both;
 }
+.hero-alias--logo {
+  margin-top: 12px;
+  line-height: 0;
+}
+.hero-alias--logo img {
+  width: clamp(210px, 32vw, 280px);
+  height: auto;
+  display: inline-block;
+}
 .hero-quote span {
   display: block;
 }
@@ -575,7 +584,7 @@ img {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  object-position: 50% 9%;
+  object-position: 52% 18%;
   border: 1.5px solid rgba(180, 137, 60, 0.6);
 }
 
